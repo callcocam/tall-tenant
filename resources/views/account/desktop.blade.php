@@ -8,33 +8,43 @@
         {{ __('Profile') }}
     </x-jet-dropdown-link>
     @if ($route = config('acl.routes.users.list'))
-        <x-jet-dropdown-link href="{{ route($route) }}">
-            {{ __('Users') }}
-        </x-jet-dropdown-link>
+        @if (\Route::has($route))
+            <x-jet-dropdown-link href="{{ route($route) }}">
+                {{ __('Users') }}
+            </x-jet-dropdown-link>
+        @endif
     @endif
 
     @if ($route = config('acl.routes.roles.list'))
-        <x-jet-dropdown-link href="{{ route($route) }}">
-            {{ __('Roles') }}
-        </x-jet-dropdown-link>
+        @if (\Route::has($route))
+            <x-jet-dropdown-link href="{{ route($route) }}">
+                {{ __('Roles') }}
+            </x-jet-dropdown-link>
+        @endif
     @endif
 
     @if ($route = config('acl.routes.permissions.list'))
-        <x-jet-dropdown-link href="{{ route($route) }}">
-            {{ __('Permisions') }}
-        </x-jet-dropdown-link>
+        @if (\Route::has($route))
+            <x-jet-dropdown-link href="{{ route($route) }}">
+                {{ __('Permisions') }}
+            </x-jet-dropdown-link>
+        @endif
     @endif
-    
+
     @if ($route = config('menus.routes.menus.list'))
-        <x-jet-dropdown-link href="{{ route($route) }}">
-            {{ __('Menus') }}
-        </x-jet-dropdown-link>
+        @if (\Route::has($route))
+            <x-jet-dropdown-link href="{{ route($route) }}">
+                {{ __('Menus') }}
+            </x-jet-dropdown-link>
+        @endif
     @endif
-    
+
     @if ($route = config('report.routes.reports.list'))
-        <x-jet-dropdown-link href="{{ route($route) }}">
-            {{ __('Reports') }}
-        </x-jet-dropdown-link>
+        @if (\Route::has($route))
+            <x-jet-dropdown-link href="{{ route($route) }}">
+                {{ __('Reports') }}
+            </x-jet-dropdown-link>
+        @endif
     @endif
 
     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
