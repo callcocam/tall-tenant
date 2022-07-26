@@ -5,7 +5,10 @@
     "keywords": ["framework", "laravel", "livewire", "alpinejs", "tailwindcss"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0"
+        "php": "^7.3|^8.0",
+        "livewire/livewire": "^2.5",
+        "wireui/wireui": "^1.5",
+        "callcocam/tall-sluggable": "dev-main"
     },
     "autoload": {
         "psr-4": {
