@@ -118,8 +118,8 @@ abstract class FormComponent extends Component
     }
 
     protected function layout(){
-        if(config("acl.layout")){
-            return config("acl.layout");
+        if(config("tenant.layout")){
+           return config("tenant.layout");
         }
         return config('livewire.layout');
     }

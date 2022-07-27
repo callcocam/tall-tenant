@@ -31,7 +31,7 @@
         @endif
     @endif
 
-    @if ($route = config('menus.routes.menus.list'))
+    @if ($route = config('menu.routes.menu.list'))
         @if (\Route::has($route))
             <x-jet-dropdown-link href="{{ route($route) }}">
                 {{ __('Menus') }}

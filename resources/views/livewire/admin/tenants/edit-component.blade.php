@@ -4,7 +4,7 @@
             <div class="w-full py-2">
                 <x-slot name="header">
                     <!-- Section Hero -->
-                    @include('tall-tenant::header', [
+                    @include('tenant::header', [
                         'label' => sprintf('Editar - %s', $model->name),
                         'url' => route(config('tenant.routes.tenant.list')),
                     ])
@@ -14,7 +14,7 @@
                 <div class="mt-5 md:mt-0">
                     <form wire:submit.prevent="saveAndStay">
                         <div class="shadow sm:rounded-md ">
-                            @include('tall-tenant::livewire.admin.tenants.form')
+                            @include('tenant::livewire.admin.tenants.form')
                         </div>
                         <div class="flex justify-between px-4 py-3 bg-gray-50 text-right sm:px-6 z-10 space-x-2">
                             <div>

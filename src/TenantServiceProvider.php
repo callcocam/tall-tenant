@@ -119,11 +119,11 @@ class TenantServiceProvider  extends ServiceProvider
     }
     protected function bootViews()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tall-tenant');
-        Livewire::component('tall-tenant::tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class);
-        Livewire::component('tall-tenant::tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
-        Livewire::component('tall-tenant::tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
-        Livewire::component('tall-tenant::tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tenant');
+        Livewire::component('tenant::tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class);
+        Livewire::component('tenant::tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
+        Livewire::component('tenant::tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
+        Livewire::component('tenant::tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
     }
      /**
      * Publish the config file.

@@ -4,7 +4,7 @@
             <div class="w-full py-2">
                 <x-slot name="header">
                     <!-- Section Hero -->
-                    @include('tall-tenant::header', ['label' => 'Tenants'])
+                    @include('tenant::header', ['label' => 'Tenants'])
                 </x-slot>
             </div>
             <div class="flex flex-col">

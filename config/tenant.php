@@ -6,6 +6,7 @@
 */
 
 return [
+    "layout"=>"theme::layouts.app",
     /*
    |--------------------------------------------------------------------------
    | Tenant Column
@@ -109,10 +110,10 @@ return [
     'default-connection' => 'UsesTenantConnection',
     'routes'=>[
         'tenant'=>[
-            'list'=>'tall-tenant.admin.tenants',
-            'create'=>'tall-tenant.admin.tenant.create',
-            'edit'=>'tall-tenant.admin.tenant.edit',
-            'show'=>'tall-tenant.admin.tenant.show',
+            'list'=>'tenant.admin.tenants',
+            'create'=>'tenant.admin.tenant.create',
+            'edit'=>'tenant.admin.tenant.edit',
+            'show'=>'tenant.admin.tenant.show',
         ]
     ]
 ];

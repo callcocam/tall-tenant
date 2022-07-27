@@ -80,6 +80,6 @@ class CreateComponent extends FormComponent
     |
     */
     public function view(){
-        return "tall-tenant::livewire.admin.tenants.create-component";
+        return "tenant::livewire.admin.tenants.create-component";
      }
 }

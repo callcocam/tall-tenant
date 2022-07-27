@@ -1,5 +1,5 @@
 {
-    "name": "callcocam/tall-tenant",
+    "name": "callcocam/tenant",
     "type": "package",
     "description": "The packages auto slug laravel model.",
     "keywords": ["framework", "laravel", "livewire", "alpinejs", "tailwindcss"],

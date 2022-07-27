@@ -4,14 +4,14 @@
             <div class="w-full py-2">
                 <x-slot name="header">
                     <!-- Section Hero -->
-                    @include('tall-tenant::header', ['label'=>"Cadastrar","url"=>route(config('tenant.routes.tenant.list'))])
+                    @include('tenant::header', ['label'=>"Cadastrar","url"=>route(config('tenant.routes.tenant.list'))])
                 </x-slot>
             </div>
             <div   class="flex flex-col">
                 <div class="mt-5 md:mt-0">
                     <form wire:submit.prevent="saveAndStay">
                         <div class="shadow sm:rounded-md ">                            
-                        @include('tall-tenant::livewire.admin.tenants.form')
+                        @include('tenant::livewire.admin.tenants.form')
                         </div>
                         <div class="flex justify-end px-4 py-3 bg-gray-50 text-right sm:px-6 z-10 space-x-2">
                             <x-button wire:loading.attr="disabled" squared negative

@@ -56,6 +56,6 @@ class EditComponent extends FormComponent
     |
     */
     public function view(){
-        return "tall-tenant::livewire.admin.tenants.edit-component";
+        return "tenant::livewire.admin.tenants.edit-component";
      }
 }

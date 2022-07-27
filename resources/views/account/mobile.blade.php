@@ -19,7 +19,7 @@
         </x-jet-responsive-nav-link>
     @endif
 @endif
-@if ($route = config('menus.routes.menus.list'))
+@if ($route = config('menu.routes.menu.list'))
     @if (\Route::has($route))
         <x-jet-responsive-nav-link href="{{ route($route) }}" :active="request()->routeIs($route)">
             {{ __('Menus') }}

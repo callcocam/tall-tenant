@@ -92,6 +92,6 @@ class ShowComponent extends FormComponent
     |
     */
     public function view(){
-        return "tall-tenant::livewire.admin.tenants.show-component";
+        return "tenant::livewire.admin.tenants.show-component";
      }
 }

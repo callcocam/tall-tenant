@@ -40,7 +40,7 @@ final class ListComponent extends TableComponent
     |
     */
     public function view(){
-        return "tall-tenant::livewire.admin.tenants.list-component";
+        return "tenant::livewire.admin.tenants.list-component";
      }
     /*
     |--------------------------------------------------------------------------

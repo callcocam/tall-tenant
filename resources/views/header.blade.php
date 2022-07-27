@@ -2,7 +2,7 @@
     <div class="flex flex-col text-gray-800 text-center sm:text-left w-full">
         <section class="flex w-full items-center">
             <h1 class="text-3xl font-bold mb-2 whitespace-nowrap">
-                {{ __('TALL-Tenants') }}
+                {{ __('tenants') }}
             </h1>
             <!-- BEGIN: breadcrums v1 -->
             <div class="container flex items-center justify-start">
