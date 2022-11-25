@@ -21,15 +21,14 @@ class TenantSeeder extends Seeder
         \Tall\Theme\Models\Status::factory()->create([
             'name'=>'Draft'
         ]);
-        $host = \Illuminate\Support\Str::replace("www.",'',request()->getHost());
      
+        $connection = config("tenant.database.connections.tenants","tenants");
+
         \Tall\Tenant\Models\Tenant::factory()->create([
-            'name'=> 'Base',
-            'domain'=> $host,
-            'database'=>env("DB_DATABASE","landlord"),
+            'database'=>$connection,
             'prefix'=>'admin',
-            'middleware'=>'landlord',
-            'provider'=>'mysql',
+            'middleware'=>$connection,
+            'provider'=>$connection,
         ]);
 
     }

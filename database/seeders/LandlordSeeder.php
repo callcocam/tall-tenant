@@ -21,33 +21,34 @@ class LandlordSeeder extends Seeder
     public function run()
     {
         
-        $clone = config('database.connections.mysql');
-        $clone['database'] = 'landlord';
-        Config::set("database.connections.landlord", $clone);
-        Config::set("database.default", 'landlord');
+        // $clone = config('database.connections.mysql');
+        // $clone['database'] = 'landlord';
+        // Config::set("database.connections.landlord", $clone);
+        // Config::set("database.default", 'landlord');
 
         $host = \Illuminate\Support\Str::replace("www.",'',request()->getHost());
      
+        $connection = config("tenant.landlord_database_connection_name","mysql");
          /**
          *@var $tenantModel Builder
          */
         $tenantModel = app(ITenant::class);
 
-        DB::connection('landlord')->table('tenants')->delete();
+        DB::connection($connection)->table('tenants')->delete();
 
         $id =  \Ramsey\Uuid\Uuid::uuid4();
 
-        DB::connection('landlord')->table('tenants')->insert(   $tenantModel->factory()->make([
+        DB::connection($connection)->table('tenants')->insert(   $tenantModel->factory()->make([
             'id' => $id,
             'name' => "Sistema Integrado De Gerenciamento E Administração",
             'slug' => "sistema-integrado-de-gerenciamento-e-administracao",
             'domain'=> $host,
             'email' => "contato@sigasmart.com.br",
             'description' => 'Sistema Integrado De Gerenciamento E Administração',
-            'database'=>config("tenant.database.connection.landlord","landlord"),
+            'database'=>$connection,
             'prefix'=>'admin',
-            'middleware'=>'landlord',
-            'provider'=>'mysql',
+            'middleware'=>$connection,
+            'provider'=>$connection,
         ])->toArray());
     }
 }

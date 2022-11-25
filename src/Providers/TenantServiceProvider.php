@@ -27,12 +27,20 @@ class TenantServiceProvider  extends ServiceProvider
     UsesMultitenancyConfig;
     /**
      * Register any application services.
-     *packages\tall-tenant
-      *packages\tall-tenant\src\Providers\TenantServiceProvider.php
+     * packages\tall-tenant
+     * packages\tall-tenant\src\Providers\TenantServiceProvider.php
      * @return void
      */
     public function register()
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Tall\Tenant\Console\Commands\TallCommand::class,
+                \Tall\Tenant\Console\Commands\TallLandlordMigrateCommand::class,
+                \Tall\Tenant\Console\Commands\TallTenantMigrateCommand::class
+            ]);
+        }
+
         if (!$this->app->runningInConsole()){
             if(!Schema::hasTable('tenants')){
                 return;
@@ -200,7 +208,7 @@ class TenantServiceProvider  extends ServiceProvider
      */
     protected function loadMigrations()
     {
-        if (config('tenant.migrate', true)) {
+        if (config('tenant.migrate', false)) {
             $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         }
     }
