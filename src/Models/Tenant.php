@@ -9,21 +9,19 @@ namespace Tall\Tenant\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tall\Tenant\Actions\ForgetCurrentTenantAction;
 use Tall\Tenant\Actions\MakeCurrentTenantAction;
-use Tall\Tenant\TenantCollection;
-use Tall\Tenant\Concerns\UsesLandlordConnection;
 
 use App\Models\User;
 
-use Illuminate\Database\Eloquent\Model as AbstractModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Ramsey\Uuid\Uuid;
+use Tall\Orm\Models\AbstractModel;
 use Tall\Sluggable\SlugOptions;
 use Tall\Sluggable\HasSlug;
+use Tall\Tenant\Contracts\ITenant;
+use Tall\Tenant\TenantCollection;
 
-
-class Tenant extends AbstractModel
+class Tenant extends AbstractModel implements ITenant
 {
-    use HasFactory, HasSlug, UsesLandlordConnection, SoftDeletes;
+    use HasFactory, HasSlug, SoftDeletes;
     
     protected $guarded = ['id'];
 
@@ -34,16 +32,6 @@ class Tenant extends AbstractModel
 
     protected $keyType = "string";
 
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($model) {
-            if (is_null($model->id)):
-                $model->id = Uuid::uuid4();
-            endif;
-        });
-    }
 
     public function user()
     {

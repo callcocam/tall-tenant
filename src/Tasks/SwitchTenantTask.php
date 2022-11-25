@@ -6,12 +6,11 @@
  */
 namespace Tall\Tenant\Tasks;
 
-
-use Tall\Tenant\Models\Tenant;
+use Tall\Tenant\Contracts\ITenant;
 
 interface SwitchTenantTask
 {
-    public function makeCurrent(Tenant $tenant);
+    public function makeCurrent(ITenant $tenant);
 
     public function forgetCurrent();
 }

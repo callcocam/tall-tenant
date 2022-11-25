@@ -9,12 +9,10 @@ namespace Tall\Tenant\Http\Livewire\Admin\Tenants;
 use Tall\Tenant\Models\Tenant;
 use Tall\Tenant\Http\Livewire\FormComponent;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
 class ShowComponent extends FormComponent
 {
-    use AuthorizesRequests;
 
     /*
     |--------------------------------------------------------------------------
@@ -25,49 +23,10 @@ class ShowComponent extends FormComponent
     */
     public function mount(?Tenant $model)
     {
-        $this->authorize(Route::currentRouteName());
-        
         $this->setFormProperties($model); // $tenant from hereon, called $this->model
     }
 
-     /*
-    |--------------------------------------------------------------------------
-    |  Features label
-    |--------------------------------------------------------------------------
-    | Label visivel no me menu
-    |
-    */
-    public function route_name($sufix=null){
-        return config('tenant.routes.tenants.show');
-     }
-
-     /*
-    |--------------------------------------------------------------------------
-    |  Features order
-    |--------------------------------------------------------------------------
-    | Order visivel no me menu
-    |
-    */
-    public function model(){
-        return app('currentTenant');
-     }
      
-   /*
-    |--------------------------------------------------------------------------
-    |  Features formAttr
-    |--------------------------------------------------------------------------
-    | Inicia as configurações basica do formulario
-    |
-    */
-    protected function formAttr(): array
-    {
-        return [
-           'formTitle' => __('Tenant'),
-           'formAction' => __('Show'),
-           'wrapWithView' => false,
-           'showDelete' => false,
-       ];
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -91,7 +50,7 @@ class ShowComponent extends FormComponent
     | Inicia as configurações basica do de nomes e rotas
     |
     */
-    public function view(){
-        return "tenant::livewire.admin.tenants.show-component";
+    protected function view($component="-component"){
+        return "tall::admin.tenants.show-component";
      }
 }

@@ -6,10 +6,14 @@
  */
 namespace Tall\Tenant\Actions;
 
-use Tall\Tenant\Models\Tenant;
+use Illuminate\Support\Facades\Config;
+use Tall\Team\Team\Facades\Team;
 use Tall\Tenant\Events\MakingTenantCurrentEvent;
 use Tall\Tenant\Tasks\Collections\TasksCollection;
 use Tall\Tenant\Tasks\SwitchTenantTask;
+
+use Tall\Tenant\Contracts\ITenant;
+use Tall\Tenant\Facades\Tenant;
 
 class MakeCurrentTenantAction
 {
@@ -21,7 +25,7 @@ class MakeCurrentTenantAction
         $this->tasksCollection = $tasksCollection;
     }
 
-    public function execute(Tenant $tenant)
+    public function execute(ITenant $tenant)
     {
         event(new MakingTenantCurrentEvent($tenant));
 
@@ -34,7 +38,7 @@ class MakeCurrentTenantAction
         return $this;
     }
 
-    protected function performTasksToMakeTenantCurrent(Tenant $tenant): self
+    protected function performTasksToMakeTenantCurrent(ITenant $tenant): self
     {
         $this->tasksCollection->each(function (SwitchTenantTask $task) use ($tenant) {
             return $task->makeCurrent($tenant);
@@ -43,13 +47,32 @@ class MakeCurrentTenantAction
         return $this;
     }
 
-    protected function bindAsCurrentTenant(Tenant $tenant): self
+    protected function bindAsCurrentTenant(ITenant $tenant): self
     {
         $containerKey = config('tenant.current_tenant_container_key');
-
+        
         app()->forgetInstance($containerKey);
 
+        // Team::addTeam($tenant->id);
+        Tenant::addTenant('tenant_id', $tenant->id);
+
         app()->instance($containerKey, $tenant);
+        //Alteramos a model do user
+        if($provider = Config::get("tenant.user.model.{$tenant->provider}")){
+            $clone = config('auth.providers.users');
+            $clone['model'] = $provider;        
+            Config::set("auth.providers.users", $clone);
+        }
+        if($user = auth()->user()){
+            Team::addTeam($user);
+        }
+        Config::set('fortify.home', sprintf("/%s", $tenant->prefix));
+        Config::set('database.default', $tenant->provider);
+        Config::set('app.name', $tenant->name);
+        Config::set('app.tenant.description', $tenant->description);
+        if($address = $tenant->address){
+            Config::set('app.address', $address);
+        }
 
         return $this;
     }

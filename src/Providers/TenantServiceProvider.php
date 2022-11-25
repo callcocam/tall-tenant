@@ -4,22 +4,22 @@
  * User: callcocam@gmail.com, contato@sigasmart.com.br
  * https://www.sigasmart.com.br
  */
-namespace Tall\Tenant;
-
+namespace Tall\Tenant\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Tall\Tenant\Concerns\Config\UsesMultitenancyConfig;
-use Tall\Tenant\Tasks\Collections\TasksCollection;
-use Tall\Tenant\Concerns\UsesTenantModel;
 use Tall\Tenant\TenantFinder;
-use Illuminate\Support\Facades\Config;
 use Tall\Tenant\TenantFinder as TenantFinderAlias;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Livewire\Component as LivewireComponent;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
-use Symfony\Component\Finder\Finder;
+use Tall\Tenant\Concerns\UsesTenantModel;
+use Tall\Tenant\Contracts\ITenant;
+use Tall\Tenant\Models\Landlord\Tenant;
+use Tall\Tenant\Tasks\Collections\TasksCollection;
+use Tall\Tenant\TenantManager;
+use Tall\Theme\Contracts\IStatus;
+use Tall\Theme\Models\Status;
+use Tall\Theme\Providers\ThemeServiceProvider;
 
 class TenantServiceProvider  extends ServiceProvider
 {
@@ -27,16 +27,36 @@ class TenantServiceProvider  extends ServiceProvider
     UsesMultitenancyConfig;
     /**
      * Register any application services.
-     *
+     *packages\tall-tenant
+      *packages\tall-tenant\src\Providers\TenantServiceProvider.php
      * @return void
      */
     public function register()
     {
         if (!$this->app->runningInConsole()){
-            if(!\Schema::hasTable('tenants')){
+            if(!Schema::hasTable('tenants')){
                 return;
             }
         }
+        $this->app->singleton(TenantManager::class, function () {
+            return new TenantManager();
+        });
+        
+        if(class_exists('App\Models\Tenant')){
+            $this->app->singleton(ITenant::class, 'App\Models\Tenant');
+        }
+        else{
+            $this->app->singleton(ITenant::class, Tenant::class);
+        }
+
+        if(class_exists('App\Models\Status')){
+            $this->app->singleton(IStatus::class, 'App\Models\Status');
+        }
+        else{
+            $this->app->singleton(IStatus::class, Status::class);
+        }
+
+
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -48,11 +68,10 @@ class TenantServiceProvider  extends ServiceProvider
     public function boot()
     {
         if (!$this->app->runningInConsole()){
-            if(!\Schema::hasTable('tenants')){
+            if(!Schema::hasTable('tenants')){
                 return;
             }
         }
-        include __DIR__.'/Support/helper.php';
         
         
         $this->bootViews();
@@ -107,11 +126,13 @@ class TenantServiceProvider  extends ServiceProvider
             abort("400", sprintf('Nenhum tenant cadastrado para %s', request()->getHost()));
         }
 
-        Config::set('fortify.home', sprintf("/%s", $tenant->prefix));
-        Config::set('database.default', $tenant->provider);
-        if($address = $tenant->address){
-            Config::set('app.address', $tenant->address);
-        }
+        // Config::set('fortify.home', sprintf("/%s", $tenant->prefix));
+        // Config::set('database.default', $tenant->provider);
+        // Config::set('app.name', $tenant->name);
+        // Config::set('app.tenant.description', $tenant->description);
+        // if($address = $tenant->address){
+        //     Config::set('app.address', $tenant->address);
+        // }
 
        // Config::set('auth.providers.users.model', config(sprintf('tenant.user.model.%s', $tenant->provider)));
 
@@ -119,11 +140,22 @@ class TenantServiceProvider  extends ServiceProvider
     }
     protected function bootViews()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tenant');
-        Livewire::component('tenant::tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class);
-        Livewire::component('tenant::tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
-        Livewire::component('tenant::tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
-        Livewire::component('tenant::tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tall');
+        if(is_dir(resource_path("views/vendor/tall/tenant"))){
+            $this->loadViewsFrom(resource_path("views/vendor/tall/tenant"), 'tall');
+        }
+
+        ThemeServiceProvider::configureDynamicComponent(__DIR__."/../../resources/views/components");
+
+        if(is_dir(resource_path("views/vendor/tall/tenant/components"))){
+            ThemeServiceProvider::configureDynamicComponent(resource_path("views/vendor/tall/tenant/components"));
+        }
+
+        Livewire::component('tall::admin.tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class);
+        Livewire::component('tall::admin.tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
+        Livewire::component('tall::admin.tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
+        Livewire::component('tall::admin.tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
+        Livewire::component('tall::admin.settings.setting-component',\Tall\Tenant\Http\Livewire\Admin\Settings\SettingComponent::class);
     }
      /**
      * Publish the config file.
@@ -132,7 +164,7 @@ class TenantServiceProvider  extends ServiceProvider
      */
     protected function loadConfigs()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/tenant.php','tenant');
+        $this->mergeConfigFrom(__DIR__.'/../../config/tenant.php','tenant');
     }
 
      /**
@@ -143,7 +175,7 @@ class TenantServiceProvider  extends ServiceProvider
     protected function publishConfig()
     {
         $this->publishes([
-            __DIR__.'/../config/tenant.php' => config_path('tenant.php'),
+            __DIR__.'/../../config/tenant.php' => config_path('tenant.php'),
         ], 'tenant');
     }
 
@@ -155,13 +187,10 @@ class TenantServiceProvider  extends ServiceProvider
     protected function publishMigrations()
     {
         $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
-        ], 'tenant-migrations');
-       
-        $this->publishes([
-            __DIR__.'/../database/factories/' => database_path('factories'),
-            __DIR__.'/../database/seeders/' => database_path('seeders'),
-        ], 'tenant-factories');
+            __DIR__.'/../../database/' => database_path(),
+        ], 'tenant-database');
+
+
     }
 
     /**
@@ -171,8 +200,8 @@ class TenantServiceProvider  extends ServiceProvider
      */
     protected function loadMigrations()
     {
-        if (config('report.migrate', true)) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        if (config('tenant.migrate', true)) {
+            $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         }
     }
 

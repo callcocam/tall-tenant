@@ -9,14 +9,14 @@ namespace Tall\Tenant\Tasks;
 
 use Illuminate\Support\Facades\DB;
 use Tall\Tenant\Exceptions\InvalidConfiguration;
-use Tall\Tenant\Models\Tenant;
 use Tall\Tenant\Concerns\Config\UsesMultitenancyConfig;
+use Tall\Tenant\Contracts\ITenant;
 
 class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     use UsesMultitenancyConfig;
 
-    public function makeCurrent(Tenant $tenant)
+    public function makeCurrent(ITenant $tenant)
     {
         $this->setTenantConnectionDatabaseName($tenant->getDatabaseName());
     }

@@ -19,11 +19,12 @@ class DomainTenantFinder extends TenantFinder
     public function findForRequest(Request $request)
     {
 
+
         $host = Str::replace("www.", '', $request->getHost());
         $host = Str::replace("new.", '', $host);
 
         $tenant = $this->getTenantModel()::whereDomain($host)->first();
-  
+
         if ($tenant)
             return $tenant;
 

@@ -6,14 +6,13 @@
  */
 namespace Tall\Tenant\Events;
 
-
-use Tall\Tenant\Models\Tenant;
+use Tall\Tenant\Contracts\ITenant;
 
 class ForgettingCurrentTenantEvent
 {
     public $tenant;
 
-    public function __construct(Tenant $tenant)
+    public function __construct(ITenant $tenant)
     {
         $this->tenant = $tenant;
     }

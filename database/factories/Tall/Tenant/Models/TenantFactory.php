@@ -20,7 +20,7 @@ class TenantFactory extends Factory
     public function definition()
     {
         return [
-           "status_id"=>\Tall\Status\Models\Status::all()->random()->id
+           "status_id"=>\Tall\Theme\Models\Status::all()->random()->id
         ];
     }
 }

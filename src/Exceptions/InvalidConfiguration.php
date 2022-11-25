@@ -16,11 +16,11 @@ class InvalidConfiguration extends \Exception
 
     public static function tenantConnectionIsEmptyOrEqualsToLandlordConnection(): self
     {
-        return new static("`SwitchTenantDatabaseTask` fails because `multitenancy.tenant_database_connection_name` is `null` or equals to `multitenancy.landlord_database_connection_name`.");
+        return new static("`SwitchTenantDatabaseTask` fails because `tenant.tenant_database_connection_name` is `null` or equals to `multitenancy.landlord_database_connection_name`.");
     }
 
     public static function invalidAction(string $actionName, string $configuredClass, string $actionClass): self
     {
-        return new static("The class currently specified in the `multitenancy.actions.{$actionName}` key '{$configuredClass}' should be or extend `{$actionClass}`.");
+        return new static("The class currently specified in the `tenant.actions.{$actionName}` key '{$configuredClass}' should be or extend `{$actionClass}`.");
     }
 }

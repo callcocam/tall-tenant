@@ -13,27 +13,26 @@ use Tall\Tenant\Exceptions\InvalidConfiguration;
 
 trait UsesMultitenancyConfig
 {
-    public function eventDatabaseConnectionName()
-    {
-        $newConection = config('database.connections');
-
-        $connection = config('tenant.event_database_connection_name', config('database.default'));
-        if ($connection)
-            $newConection[$connection] = array_merge(config('database.connections.mysql'), config(sprintf('tenant.database.connections.%s', $connection)));
-
-        config([
-            'database.connections' => $newConection
-        ]);
-
-        return $connection;
+    private function connections(){
+        return config('database.connections');
     }
+
+    private function connection($connection){
+        return array_merge(config('database.connections.mysql'), config(sprintf('tenant.database.connections.%s', $connection),[]));
+    }
+
+    private function connectionName($connection){
+        return config(sprintf('tenant.%s', $connection), config('database.default'));
+    }
+
     public function tenantDatabaseConnectionName()
     {
-        $newConection = config('database.connections');
+        $newConection = $this->connections();
 
-        $connection = config('tenant.tenant_database_connection_name', config('database.default'));
+        $connection = $this->connectionName('tenant_database_connection_name');
+
         if ($connection)
-            $newConection[$connection] = array_merge(config('database.connections.mysql'), config(sprintf('tenant.database.connections.%s', $connection)));
+            $newConection[$connection] = $this->connection($connection);
 
         config([
             'database.connections' => $newConection
@@ -43,12 +42,12 @@ trait UsesMultitenancyConfig
     }
     public function landlordDatabaseConnectionName()
     {
-        $newConection = config('database.connections');
+        $newConection = $this->connections();
 
-        $connection = config('tenant.landlord_database_connection_name', config('database.default'));
-
+        $connection = $this->connectionName('landlord_database_connection_name');
+        
         if ($connection)
-            $newConection[$connection] = array_merge(config('database.connections.mysql'), config(sprintf('tenant.database.connections.%s', $connection),[]));
+            $newConection[$connection] = $this->connection($connection);
 
 
         config([

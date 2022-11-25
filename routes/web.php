@@ -17,8 +17,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->prefix('admin')->group(function () {
-    Route::get('/tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class)->name(config('tenant.routes.tenant.list'));    
-    Route::get('/tenant/cadastrar',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class)->name(config('tenant.routes.tenant.create'));    
-    Route::get('/tenant/{model}/editar',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class)->name(config('tenant.routes.tenant.edit'));    
-    Route::get('/tenant/{model}/show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class)->name(config('tenant.routes.tenant.show'));    
+    Route::get('/tenants',\Tall\Tenant\Http\Livewire\Admin\Tenants\ListComponent::class)->name('admin.tenants');    
+    Route::get('/minha/empresa',\Tall\Tenant\Http\Livewire\Admin\Settings\SettingComponent::class)->name('admin.tenants.setting');    
+    Route::get('/tenant/cadastrar',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class)->name('admin.tenants.create');    
+    Route::get('/tenant/{model}/editar',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class)->name('admin.tenants.edit');    
+    Route::get('/tenant/{model}/show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class)->name('admin.tenants.show');    
 });

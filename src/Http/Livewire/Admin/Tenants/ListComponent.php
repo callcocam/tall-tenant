@@ -9,29 +9,34 @@ namespace Tall\Tenant\Http\Livewire\Admin\Tenants;
 use Tall\Tenant\Models\Tenant;
 use Tall\Tenant\Http\Livewire\TableComponent;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Tall\Table\Fields\Column;
 
 final class ListComponent extends TableComponent
 {
-    use AuthorizesRequests;
     
     public function mount()
     {
-        $this->authorize(Route::currentRouteName());
-    
+
+        $this->setUp(Route::currentRouteName());
     }
-    
-    /*
-    |--------------------------------------------------------------------------
-    |  Features route
-    |--------------------------------------------------------------------------
-    | Rota create do crud, cadastrar um novo registro
-    |
-    */
-    public function getCreateProperty()
-    {
-        return config("tenant.routes.tenants.create");
+     
+    /**
+     * Função para trazer uma lista de colunas (opcional)
+     * Geralmente usada com um component de table dinamicas
+     * Voce pode sobrescrever essas informações no component filho 
+     */
+    public function columns(){
+        return [
+            Column::make('Name'),
+            Column::actions([
+                Column::make('Edit')->icon('pencil')->route('admin.tenants.edit'),
+                Column::make('Delete')->icon('trash')->route('admin.tenants.delete'),
+            ]),
+
+        ];
     }
+
+
     /*
     |--------------------------------------------------------------------------
     |  Features view
@@ -39,8 +44,8 @@ final class ListComponent extends TableComponent
     | Inicia as configurações basica do de nomes e rotas
     |
     */
-    public function view(){
-        return "tenant::livewire.admin.tenants.list-component";
+    protected function view($component="-component"){
+        return "tall::admin.tenants.list-component";
      }
     /*
     |--------------------------------------------------------------------------
@@ -51,20 +56,6 @@ final class ListComponent extends TableComponent
     */
     protected function query(){
         return Tenant::query();
-    }
-    
-    /*
-    |--------------------------------------------------------------------------
-    |  Features tableAttr
-    |--------------------------------------------------------------------------
-    | Inicia as configurações basica do table
-    |
-    */
-    protected function tableAttr(): array
-    {
-        return [
-           'tableTitle' => __('Tenants'),
-       ];
     }
 
 }

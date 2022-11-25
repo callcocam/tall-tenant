@@ -4,14 +4,10 @@
 * User: callcocam@gmail.com, contato@sigasmart.com.br
 * https://www.sigasmart.com.br
 */
-namespace Tall\Tenant;
+namespace Tall\Tenant\Providers;
 
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Passport;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -37,11 +33,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::prefix('api')
                 ->middleware('api')
                 ->namespace($this->namespace)
-                ->group(__DIR__.'/../routes/api.php');
+                ->group(__DIR__.'/../../routes/api.php');
 
             Route::middleware(['web'])
                 ->namespace($this->namespace)
-                ->group(__DIR__.'/../routes/web.php');
+                ->group(__DIR__.'/../../routes/web.php');
 
         });
     }

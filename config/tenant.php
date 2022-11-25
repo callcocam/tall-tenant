@@ -6,7 +6,6 @@
 */
 
 return [
-    "layout"=>"theme::layouts.app",
     /*
    |--------------------------------------------------------------------------
    | Tenant Column
@@ -61,7 +60,7 @@ return [
      *
      * It must be or extend `Tall\Models\Tenant::class`
      */
-    'tenant_model' => \Tall\Tenant\Models\Tenant::class,
+    'tenant_model' => \Tall\Tenant\Models\Landlord\Tenant::class,
     /*
     * This class is the model used for storing configuration on tenants.
     *
@@ -69,8 +68,9 @@ return [
     */
     'user' => [
         'model' => [
-            'landlord' => \Tall\Tenant\Models\UserLandlord::class,
-            'tenants' => \Tall\Tenant\Models\UserTenant::class
+            'mysql' => \Tall\Tenant\Models\Landlord\User::class,
+            'landlord' => \Tall\Tenant\Models\Landlord\User::class,
+            'tenants' => \Tall\Tenant\Models\Tenant\User::class
         ]
     ],
     /*
@@ -86,11 +86,6 @@ return [
     'landlord_database_connection_name' => 'mysql',
 
     /*
-     * The connection name to reach the events database
-     */
-    'event_database_connection_name' => 'events',
-
-    /*
      * This key will be used to bind the current tenant in the container.
      */
     'current_tenant_container_key' => 'currentTenant',
@@ -102,18 +97,10 @@ return [
                 'host' => env('DB_TENANT_HOST', '127.0.0.1'),
                 'port' => env('DB_TENANT_PORT', '3306'),
                 'database' => env('DB_TENANT_DATABASE', 'tenants'),
-                'username' => env('DB_TENANT_USERNAME', 'root'),
-                'password' => env('DB_TENANT_PASSWORD', ''),
+                'username' => env('DB_TENANT_USERNAME', 'sail'),
+                'password' => env('DB_TENANT_PASSWORD', 'password'),
             ],
         ]
     ],
     'default-connection' => 'UsesTenantConnection',
-    'routes'=>[
-        'tenant'=>[
-            'list'=>'tenant.admin.tenants',
-            'create'=>'tenant.admin.tenant.create',
-            'edit'=>'tenant.admin.tenant.edit',
-            'show'=>'tenant.admin.tenant.show',
-        ]
-    ]
 ];

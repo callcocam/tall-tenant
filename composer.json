@@ -1,17 +1,17 @@
 {
-    "name": "callcocam/tenant",
+    "name": "callcocam/tall-tenant",
     "type": "package",
-    "description": "The packages auto slug laravel model.",
+    "description": "Laravel package for multi-tenant with one or more databases, Pacote laravel para mult-tenant com um ou mais database.",
     "keywords": ["framework", "laravel", "livewire", "alpinejs", "tailwindcss"],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "livewire/livewire": "^2.5",
-        "wireui/wireui": "^1.5",
-        "callcocam/tall-sluggable": "dev-main",
-        "callcocam/tall-status": "dev-main"
+        "callcocam/tall-sluggable": "dev-main"
     },
     "autoload": {
+        "files": [
+            "helpers.php"
+        ],
         "psr-4": {
             "Tall\\Tenant\\": "src"
         }
@@ -20,7 +20,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tall\\Tenant\\TenantServiceProvider"
+                "Tall\\Tenant\\Providers\\TenantServiceProvider"
             ]
         }
     },

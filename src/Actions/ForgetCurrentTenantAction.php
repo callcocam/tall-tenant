@@ -6,8 +6,7 @@
  */
 namespace Tall\Tenant\Actions;
 
-
-use App\Models\Tenant;
+use Tall\Tenant\Contracts\ITenant;
 use Tall\Tenant\Events\ForgettingCurrentTenantEvent;
 use Tall\Tenant\Tasks\Collections\TasksCollection;
 use Tall\Tenant\Tasks\SwitchTenantTask;
@@ -21,7 +20,7 @@ class ForgetCurrentTenantAction
         $this->tasksCollection = $tasksCollection;
     }
 
-    public function execute(Tenant $tenant)
+    public function execute(ITenant $tenant)
     {
         event(new ForgettingCurrentTenantEvent($tenant));
 
