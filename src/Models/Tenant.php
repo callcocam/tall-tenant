@@ -13,6 +13,7 @@ use Tall\Tenant\Actions\MakeCurrentTenantAction;
 use App\Models\User;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Tall\Acl\Contracts\IUser;
 use Tall\Orm\Models\AbstractModel;
 use Tall\Sluggable\SlugOptions;
 use Tall\Sluggable\HasSlug;
@@ -35,7 +36,7 @@ class Tenant extends AbstractModel implements ITenant
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(app(IUser::class));
     }
 
     

@@ -6,10 +6,11 @@
 */
 namespace Tall\Tenant\Http\Livewire\Admin\Tenants;
 
-use Tall\Tenant\Models\Tenant;
 use Tall\Tenant\Http\Livewire\FormComponent;
 use Illuminate\Support\Facades\Route;
+use Tall\Acl\Contracts\IRole;
 use Tall\Form\Fields\Field;
+use Tall\Tenant\Models\Landlord\Tenant;
 use Tall\Tenant\Models\Tenant\Tenant as TenantTenant;
 use Tall\Theme\Models\Status;
 
@@ -27,6 +28,7 @@ class EditComponent extends FormComponent
     {
         
         $this->setFormProperties($model, Route::currentRouteName()); // $tenant from hereon, called $this->model
+       
     }
 
 
@@ -40,13 +42,13 @@ class EditComponent extends FormComponent
             Field::make('Database', 'database')->span(3),
             Field::make('Middleware', 'middleware')->span(6),
             Field::make('Provider', 'provider')->span(6),
-            Field::textarea('Description', 'description'),
+            Field::quill('Description', 'description'),
             Field::radio('Status','status_id', Status::query()->pluck('name','id')->toArray()),
             Field::date('Data de criação','created_at')->span(6),
             Field::date('Última atualização', 'updated_at')->span(6),
+            Field::checkbox('Roles', 'access', app(IRole::class)->pluck('name', 'id')->toArray())->multiple(true),
         ];
     }
-
     
     /**
      * @param $callback uma função anonima para dar um retorno perssonalizado
@@ -56,6 +58,9 @@ class EditComponent extends FormComponent
     protected function success($callback=null)
     {
         return parent::success(function($model, $result=false){
+
+               $this->model->hasHoles()->sync(data_get($this->form_data, 'access'));
+
                 TenantTenant::query()->updateOrCreate([
                      'id'=>$model->id
                 ],

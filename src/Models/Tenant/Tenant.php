@@ -6,6 +6,7 @@
 */
 namespace Tall\Tenant\Models\Tenant;
 
+use Tall\Acl\Contracts\IRole;
 use Tall\Tenant\Concerns\UsesTenantConnection;
 use Tall\Tenant\Contracts\ITenant;
 use Tall\Tenant\Models\Tenant as ModelsTenant;
@@ -16,6 +17,8 @@ class Tenant extends ModelsTenant implements ITenant
 
     
        protected $guarded = [];
+       
+       protected $with = ['roles'];
         /**
      * Generate a primary UUID for the model.
      *
@@ -25,6 +28,11 @@ class Tenant extends ModelsTenant implements ITenant
     {
       
         
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(app(IRole::class))->withTimestamps();
     }
 
 }

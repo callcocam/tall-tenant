@@ -7,7 +7,7 @@
 
 namespace Tall\Tenant\Http\Livewire;
 
-use Tall\Table\TableComponent as TableTableComponent;
+use Tall\Orm\Http\Livewire\TableComponent as TableTableComponent;
 
 abstract class TableComponent extends TableTableComponent
 {

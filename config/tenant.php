@@ -61,6 +61,18 @@ return [
      * It must be or extend `Tall\Models\Tenant::class`
      */
     'tenant_model' => \Tall\Tenant\Models\Landlord\Tenant::class,
+      /*
+     * This class is the model used for storing configuration on tenants.
+     *
+     * It must be or extend `Tall\Models\Tenant::class`
+     */
+    'tenant' => [
+        'model'=>[
+            'mysql' => \Tall\Tenant\Models\Landlord\Tenant::class,
+            'landlord' => \Tall\Tenant\Models\Landlord\Tenant::class,
+            'tenants' => \Tall\Tenant\Models\Tenant\Tenant::class
+        ]
+    ],
     /*
     * This class is the model used for storing configuration on tenants.
     *

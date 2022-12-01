@@ -24,7 +24,13 @@ class CreateComponent extends FormComponent
     */
     public function mount(?Tenant $model)
     {
+        abort_if(isTenant(), '403');
+        
         $this->setFormProperties($model); // $tenant from hereon, called $this->model
+        data_set($this->form_data,'prefix','admin');
+        data_set($this->form_data,'database','tenants');
+        data_set($this->form_data,'middleware','tenants');
+        data_set($this->form_data,'provider','tenants');
     }
 
     protected function fields()

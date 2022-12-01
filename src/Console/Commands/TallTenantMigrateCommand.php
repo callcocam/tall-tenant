@@ -35,6 +35,7 @@ class TallTenantMigrateCommand extends Command
         Config::set('tenant.database.connections.tenants', array_merge(config('database.connections.mysql'),config('tenant.database.connections.tenants')));
         Config::set('database.connections', array_merge(config('database.connections'),config('tenant.database.connections')));
         Config::set('database.default', $this->option('database'));
+       
         $opt = [
         '--seed' => $this->option('seed'),
         '--database' => $this->option('database'),

@@ -7,6 +7,7 @@
 namespace Tall\Tenant\Actions;
 
 use Illuminate\Support\Facades\Config;
+use Tall\Acl\Contracts\IUser;
 use Tall\Team\Team\Facades\Team;
 use Tall\Tenant\Events\MakingTenantCurrentEvent;
 use Tall\Tenant\Tasks\Collections\TasksCollection;
@@ -62,9 +63,10 @@ class MakeCurrentTenantAction
             $clone = config('auth.providers.users');
             $clone['model'] = $provider;        
             Config::set("auth.providers.users", $clone);
+            app()->singleton(IUser::class, config('auth.providers.users.model'));
         }
-        if($user = auth()->user()){
-            Team::addTeam($user);
+        if($provider = Config::get("tenant.tenant.model.{$tenant->provider}")){
+            app()->singleton(ITenant::class, $provider);
         }
         Config::set('fortify.home', sprintf("/%s", $tenant->prefix));
         Config::set('database.default', $tenant->provider);

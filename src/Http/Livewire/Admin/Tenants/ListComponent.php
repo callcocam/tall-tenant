@@ -30,7 +30,7 @@ final class ListComponent extends TableComponent
             Column::make('Name'),
             Column::actions([
                 Column::make('Edit')->icon('pencil')->route('admin.tenants.edit'),
-                Column::make('Delete')->icon('trash')->route('admin.tenants.delete'),
+                Column::make('Permissões')->icon('lock-open')->route('admin.tenants.permissions'),
             ]),
 
         ];
@@ -55,7 +55,20 @@ final class ListComponent extends TableComponent
     |
     */
     protected function query(){
-        return Tenant::query();
+        return Tenant::query() ->when(isTenant(), function($builder){
+            return $builder->where('id',get_tenant_id());
+        });
     }
 
+  /**
+     * Rota para cadastra um novo registro
+     * Voce deve sobrescrever essas informações no component filho (opcional)
+     */
+    protected function route_create()
+    {
+
+        if(isTenant()) return null;
+
+        return parent::route_create();
+    }
 }

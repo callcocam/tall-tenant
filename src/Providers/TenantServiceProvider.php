@@ -50,12 +50,12 @@ class TenantServiceProvider  extends ServiceProvider
             return new TenantManager();
         });
         
-        if(class_exists('App\Models\Tenant')){
-            $this->app->singleton(ITenant::class, 'App\Models\Tenant');
-        }
-        else{
-            $this->app->singleton(ITenant::class, Tenant::class);
-        }
+        // if(class_exists('App\Models\Tenant')){
+        //     $this->app->singleton(ITenant::class, 'App\Models\Tenant');
+        // }
+        // else{
+        //     $this->app->singleton(ITenant::class, Tenant::class);
+        // }
 
         if(class_exists('App\Models\Status')){
             $this->app->singleton(IStatus::class, 'App\Models\Status');
@@ -163,6 +163,8 @@ class TenantServiceProvider  extends ServiceProvider
         Livewire::component('tall::admin.tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
         Livewire::component('tall::admin.tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
         Livewire::component('tall::admin.tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
+        Livewire::component('tall::admin.tenant.permissions.permission',\Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions\PermissionComponent::class);
+        Livewire::component('tall::admin.tenants.import.csv-component',\Tall\Tenant\Http\Livewire\Admin\Tenants\Import\CsvComponent::class);
         Livewire::component('tall::admin.settings.setting-component',\Tall\Tenant\Http\Livewire\Admin\Settings\SettingComponent::class);
     }
      /**

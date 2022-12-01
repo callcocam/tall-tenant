@@ -7,16 +7,14 @@
 
 namespace Tall\Tenant\Models\Landlord;
 
-use Laravel\Jetstream\HasTeams;
-use Tall\Team\Contracts\IUser;
 use App\Models\User as ModelsUser;
-use Tall\Team\Concerns\HasRolesAndPermissions;
+use Tall\Acl\Concerns\HasRolesAndPermissions;
+use Tall\Acl\Contracts\IUser;
 use Tall\Tenant\Concerns\UsesLandlordConnection;
 
 class User extends ModelsUser implements IUser
 {
     use UsesLandlordConnection;
-    use HasTeams;
     use HasRolesAndPermissions;
 
 

@@ -23,6 +23,7 @@ return new class extends Migration
                 'permission_user',
                 'permission_role',
                 'migrations',
+                'password_resets',
                 'menu_sub_tenant'
         ]);
 

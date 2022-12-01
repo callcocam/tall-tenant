@@ -4,12 +4,15 @@
 * User: callcocam@gmail.com, contato@sigasmart.com.br
 * https://www.sigasmart.com.br
 */
-namespace Tall\Tenant\Http\Livewire\Admin\Tenants;
+namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions;
 
-use Tall\Tenant\Models\Tenant;
-use Tall\Orm\Http\Livewire\ShowComponent as LivewireShowComponent;
+use Illuminate\Support\Facades\Route;
+use Tall\Acl\Contracts\IPermission;
+use Tall\Form\Fields\Field;
+use Tall\Orm\Http\Livewire\FormComponent;
+use Tall\Tenant\Models\Landlord\Tenant;
 
-class ShowComponent extends LivewireShowComponent
+class PermissionComponent extends FormComponent
 {
 
     /*
@@ -21,10 +24,30 @@ class ShowComponent extends LivewireShowComponent
     */
     public function mount(?Tenant $model)
     {
-        $this->setFormProperties($model); // $tenant from hereon, called $this->model
+        $this->setFormProperties($model, Route::currentRouteName());  // $tenant from hereon, called $this->model
     }
 
      
+
+    protected function fields()
+    {
+        return [
+            Field::checkbox('Roles', 'permissions', app(IPermission::class)
+            ->pluck('name', 'id')->toArray())->multiple(true),
+        ];
+    }
+
+     /**
+     * @param $callback uma função anonima para dar um retorno perssonalizado
+     * Função de sucesso ou seja passou por todas as validações e agora pode ser salva no banco
+     * Voce pode sobrescrever essas informações no component filho
+     */
+    protected function success($callback=null)
+    {
+        $this->model->hasPermissions()->sync(data_get($this->form_data, 'permissions'));
+
+        return true;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -49,6 +72,6 @@ class ShowComponent extends LivewireShowComponent
     |
     */
     protected function view($component="-component"){
-        return "tall::admin.tenants.show-component";
+        return "tall::admin.tenants.permissions.show-component";
      }
 }
