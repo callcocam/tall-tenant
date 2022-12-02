@@ -94,6 +94,13 @@ class TallCommand extends Command
         }
         File::put(app_path('app/Models/User.php'), file_get_contents($path));
 
+
+        $path = 'stubs/pagination-blade.stub';
+        if(file_exists(base_path('stubs/pagination-blade.stub'))){
+            $path = base_path('stubs/pagination-blade.stub');
+        }
+        File::put(resource_path('views/vendor/livewire/pagination.blade.php'), file_get_contents(base_path('stubs/pagination-blade.stub')));
+
         if ($this->option('m')) {
             $this->call('migrate:fresh',[
                 '--seed' => true
