@@ -82,6 +82,18 @@ class TallCommand extends Command
             mkdir(resource_path('views/vendor/livewire'));
         }
 
+        $path = 'stubs/fortity-create-new-user.stub';
+        if(file_exists(base_path('stubs/fortity-create-new-user.stub'))){
+            $path = base_path('stubs/fortity-create-new-user.stub');
+        }
+        File::put(app_path('Actions/Fortify/CreateNewUser.php'), file_get_contents($path));
+
+        $path = 'stubs/model-user.stub';
+        if(file_exists(base_path('stubs/model-user.stub'))){
+            $path = base_path('stubs/model-user.stub');
+        }
+        File::put(app_path('app/Models/User.php'), file_get_contents($path));
+
         if ($this->option('m')) {
             $this->call('migrate:fresh',[
                 '--seed' => true

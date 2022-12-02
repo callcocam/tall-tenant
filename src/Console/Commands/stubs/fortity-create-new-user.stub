@@ -1,0 +1,68 @@
+<?php
+/**
+* Created by Claudio Campos.
+* User: callcocam@gmail.com, contato@sigasmart.com.br
+* https://www.sigasmart.com.br
+*/
+namespace App\Actions\Fortify;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Jetstream\Jetstream;
+use Tall\Acl\Contracts\IUser;
+use Tall\Acl\Models\Role;
+
+class CreateNewUser implements CreatesNewUsers
+{
+    use PasswordValidationRules;
+
+    /**
+     * Validate and create a newly registered user.
+     *
+     * @param  array  $input
+     * @return \App\Models\User
+     */
+    public function create(array $input)
+    {
+        Validator::make($input, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => $this->passwordRules(),
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+        ])->validate();
+
+        return DB::transaction(function () use ($input) {
+            return tap(app(config('auth.providers.users.model'))->query()->create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]), function (IUser $user) {
+                $this->createRole($user);
+            });
+        });
+    }
+
+    
+    /**
+     * Create a personal team for the user.
+     *
+     * @param  \App\Models\User  $user
+     * @return void
+     */
+    protected function createRole(IUser $user)
+    {
+        if(app(config('auth.providers.users.model'))->query()->count()<=1){
+            /**
+             *@var $model Builder
+            */
+            $modelRole = app(Role::class);
+
+            $role =  $modelRole->query()->where('slug' ,'super-admin')->first();
+            
+            $user->roles()->sync([$role->id]);
+        }
+    }
+
+}
