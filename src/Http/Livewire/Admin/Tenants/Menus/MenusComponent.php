@@ -4,15 +4,15 @@
 * User: callcocam@gmail.com, contato@sigasmart.com.br
 * https://www.sigasmart.com.br
 */
-namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions;
+namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Menus;
 
 use Illuminate\Support\Facades\Route;
-use Tall\Acl\Contracts\IPermission;
 use Tall\Form\Fields\Field;
 use Tall\Orm\Http\Livewire\FormComponent;
 use Tall\Tenant\Models\Landlord\Tenant;
+use Tall\Theme\Contracts\IMenu;
 
-class PermissionComponent extends FormComponent
+class MenusComponent extends FormComponent
 {
 
     /*
@@ -32,8 +32,11 @@ class PermissionComponent extends FormComponent
     protected function fields()
     {
         return [
-            Field::checkbox('Roles', 'permissions', app(IPermission::class)
-            ->pluck('name', 'id')->toArray())->multiple(true),
+            Field::checkbox('Menus', 'menus', app(IMenu::class)
+            ->pluck('name', 'id')->toArray())->multiple(true)->format(function($model, $field, $key, $value){
+                $route = 'admin.tenants.menus.sub';
+                return  view('tall::link', compact('model','field','key','value', 'route'));
+            }),
         ];
     }
 
@@ -44,7 +47,7 @@ class PermissionComponent extends FormComponent
      */
     protected function success($callback=null)
     {
-        $this->model->hasPermissions()->sync(data_get($this->form_data, 'permissions'));
+        $this->model->hasMenus()->sync(data_get($this->form_data, 'menus'));
 
         return true;
     }
@@ -72,7 +75,7 @@ class PermissionComponent extends FormComponent
     |
     */
     protected function view($component="-component"){
-        return "tall::admin.tenants.permissions.permission-component";
+        return "tall::admin.tenants.menus.menus-component";
      }
 
      

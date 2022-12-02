@@ -163,6 +163,8 @@ class TenantServiceProvider  extends ServiceProvider
         Livewire::component('tall::admin.tenant.create',\Tall\Tenant\Http\Livewire\Admin\Tenants\CreateComponent::class);
         Livewire::component('tall::admin.tenant.edit',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class);
         Livewire::component('tall::admin.tenant.show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class);
+        Livewire::component('tall::admin.tenants.menus.menus',\Tall\Tenant\Http\Livewire\Admin\Tenants\Menus\MenusComponent::class);
+        Livewire::component('tall::admin.tenants.menus.sub.menus',\Tall\Tenant\Http\Livewire\Admin\Tenants\Menus\Sub\MenusComponent::class);
         Livewire::component('tall::admin.tenant.permissions.permission',\Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions\PermissionComponent::class);
         Livewire::component('tall::admin.tenants.import.csv-component',\Tall\Tenant\Http\Livewire\Admin\Tenants\Import\CsvComponent::class);
         Livewire::component('tall::admin.settings.setting-component',\Tall\Tenant\Http\Livewire\Admin\Settings\SettingComponent::class);

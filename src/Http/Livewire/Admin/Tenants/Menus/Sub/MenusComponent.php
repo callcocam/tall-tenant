@@ -4,17 +4,20 @@
 * User: callcocam@gmail.com, contato@sigasmart.com.br
 * https://www.sigasmart.com.br
 */
-namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions;
+namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Menus\Sub;
 
 use Illuminate\Support\Facades\Route;
-use Tall\Acl\Contracts\IPermission;
 use Tall\Form\Fields\Field;
 use Tall\Orm\Http\Livewire\FormComponent;
 use Tall\Tenant\Models\Landlord\Tenant;
+use Tall\Theme\Contracts\IMenu;
+use Tall\Theme\Contracts\IMenuSub;
 
-class PermissionComponent extends FormComponent
+class MenusComponent extends FormComponent
 {
 
+    public $search;
+    public $key;
     /*
     |--------------------------------------------------------------------------
     |  Features mount
@@ -22,7 +25,7 @@ class PermissionComponent extends FormComponent
     | Inicia o formulario com um cadastro selecionado
     |
     */
-    public function mount(?Tenant $model)
+    public function mount(?Tenant $model, $key)
     {
         $this->setFormProperties($model, Route::currentRouteName());  // $tenant from hereon, called $this->model
     }
@@ -32,7 +35,10 @@ class PermissionComponent extends FormComponent
     protected function fields()
     {
         return [
-            Field::checkbox('Roles', 'permissions', app(IPermission::class)
+            Field::checkbox('Sub Menus', 'menus', app(IMenuSub::class)
+            ->when($this->search, function($builder, $search) {
+                $builder->where('name', 'LIKE', "%{$search}%");
+            })
             ->pluck('name', 'id')->toArray())->multiple(true),
         ];
     }
@@ -49,6 +55,10 @@ class PermissionComponent extends FormComponent
         return true;
     }
 
+    public function getMenusProperty()
+    {
+        return app()->make(IMenu::class)->get();
+    }
     /*
     |--------------------------------------------------------------------------
     |  Features saveAndGoBackResponse
@@ -72,7 +82,7 @@ class PermissionComponent extends FormComponent
     |
     */
     protected function view($component="-component"){
-        return "tall::admin.tenants.permissions.permission-component";
+        return "tall::admin.tenants.menus.sub.menus-component";
      }
 
      

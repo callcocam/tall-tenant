@@ -31,6 +31,7 @@ final class ListComponent extends TableComponent
             Column::actions([
                 Column::make('Edit')->icon('pencil')->route('admin.tenants.edit'),
                 Column::make('Permissões')->icon('lock-open')->route('admin.tenants.permissions'),
+                Column::make('Menus')->icon('lock-open')->route('admin.tenants.menus'),
             ]),
 
         ];
@@ -71,4 +72,5 @@ final class ListComponent extends TableComponent
 
         return parent::route_create();
     }
+
 }

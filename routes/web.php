@@ -23,5 +23,7 @@ Route::middleware([
     Route::get('/tenant/{model}/editar',\Tall\Tenant\Http\Livewire\Admin\Tenants\EditComponent::class)->name('admin.tenants.edit');    
     Route::get('/tenant/{model}/show',\Tall\Tenant\Http\Livewire\Admin\Tenants\ShowComponent::class)->name('admin.tenants.show');    
     Route::get('/tenant/{model}/permissoes',\Tall\Tenant\Http\Livewire\Admin\Tenants\Permissions\PermissionComponent::class)->name('admin.tenants.permissions');    
+    Route::get('/tenant/{model}/menus',\Tall\Tenant\Http\Livewire\Admin\Tenants\Menus\MenusComponent::class)->name('admin.tenants.menus');    
+    Route::get('/tenant/{model}/menus/{key}/sub',\Tall\Tenant\Http\Livewire\Admin\Tenants\Menus\Sub\MenusComponent::class)->name('admin.tenants.menus.sub');    
     Route::get('/tenants/importar',\Tall\Tenant\Http\Livewire\Admin\Tenants\Import\CsvComponent::class)->name('admin.tenants.import');    
 });
