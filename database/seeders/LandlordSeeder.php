@@ -32,7 +32,7 @@ class LandlordSeeder extends Seeder
          /**
          *@var $tenantModel Builder
          */
-        $tenantModel = app(ITenant::class);
+        $tenantModel = app( config("tenant.tenant_model","mysql"));
 
         DB::connection($connection)->table('tenants')->delete();
 

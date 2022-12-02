@@ -7,13 +7,13 @@
 namespace Tall\Tenant\Http\Livewire\Admin\Tenants\Import;
 
 use Livewire\WithFileUploads;
-use Tall\Tenant\Models\Tenant;
-use Tall\Tenant\Http\Livewire\ImportComponent;
 use League\Csv\Reader;
 use League\Csv\Statement;
 use Tall\Cms\Helpers\ChunkIterator;
 use Tall\Tenant\Contracts\ITenant;
 use Illuminate\Support\Str;
+use Tall\Cms\Models\Make;
+use Tall\Orm\Http\Livewire\ImportComponent;
 
 class CsvComponent extends ImportComponent
 {
@@ -30,7 +30,7 @@ class CsvComponent extends ImportComponent
     | Inicia o formulario com um cadastro selecionado
     |
     */
-    public function mount(?Tenant $model)
+    public function mount(?Make $model)
     {
         $this->setFormProperties($model); // $tenant from hereon, called $this->model
     }
@@ -147,6 +147,12 @@ class CsvComponent extends ImportComponent
             }
           }
           
+          $this->reset(['file','fileHeaders', 'columnMaps','requiredColumnMaps']);
+  
+          $this->showDrawer = false;
+  
+          $this->emit('refreshImport', null);
+          
       }
     
 
@@ -155,21 +161,7 @@ class CsvComponent extends ImportComponent
           return $this->columnMaps;
       }
   
-      
-    public function setColumnsProperties()
-    {
-            
-            $columns = ['id','name','email','domain','description','created_at','updated_at','deleted_at'];
-            
-            $requiredColumnMaps = [];
-
-            if($requiredColumnMaps){
-                $this->requiredColumnMaps = array_combine($requiredColumnMaps, $requiredColumnMaps);
-            }
-
-            $this->columnMaps = collect($columns)->mapWithKeys(fn($column)=>[$column=>''])->toArray();
-        
-    }
+  
 
     /*
     |--------------------------------------------------------------------------
@@ -181,4 +173,10 @@ class CsvComponent extends ImportComponent
     protected function view($component="-component"){
         return "tall::admin.tenants.import.csv-component";
      }
+
+     
+    protected function ignoreColumns(){
+      return ['updated_at','domain','prefix','provider','database','middleware'];
+    }
+
 }
