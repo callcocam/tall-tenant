@@ -27,7 +27,7 @@ class MenusComponent extends FormComponent
     */
     public function mount(?Tenant $model, $key)
     {
-        $this->setFormProperties($model, Route::currentRouteName());  // $tenant from hereon, called $this->model
+        $this->setFormProperties($model);  // $tenant from hereon, called $this->model
     }
 
      

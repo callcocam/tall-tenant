@@ -24,7 +24,7 @@ class SettingComponent extends FormComponent
     public function mount()
     {
         
-        $this->setFormProperties(app('currentTenant'), Route::currentRouteName()); // $tenant from hereon, called $this->model
+        $this->setFormProperties(app('currentTenant')); // $tenant from hereon, called $this->model
     }
 
 
